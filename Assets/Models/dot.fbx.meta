@@ -1,26 +1,19 @@
 fileFormatVersion: 2
-guid: c4f1e31bf4696479a8b548b6ea0ca636
-timeCreated: 1508768175
+guid: 2a95113c40a144818ab3b674fa2f1e3c
+timeCreated: 1506109212
 licenseType: Free
 ModelImporter:
-  serializedVersion: 22
+  serializedVersion: 21
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
     4300000: dot
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: lineMat
-    second: {fileID: 2100000, guid: d194f7e4b0a734eeeb33342b4ca7277a, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -33,7 +26,6 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    importAnimatedCustomProperties: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -50,7 +42,7 @@ ModelImporter:
     addColliders: 0
     importVisibility: 1
     importBlendShapes: 1
-    importCameras: 0
+    importCameras: 1
     importLights: 1
     swapUVChannels: 0
     generateSecondaryUV: 0

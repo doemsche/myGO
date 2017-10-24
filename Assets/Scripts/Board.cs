@@ -2,24 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Board : MonoBehaviour {
-
+public class Board : MonoBehaviour
+{
+    // uniform distance between nodes
     public static float spacing = 2f;
 
-    public static readonly Vector2[] directions = {
+    // four compass directions
+    public static readonly Vector2[] directions =
+    {
         new Vector2(spacing, 0f),
-        new Vector2(-spacing,0f),
+        new Vector2(-spacing, 0f),
         new Vector2(0f, spacing),
         new Vector2(0f, -spacing)
     };
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    List<Node> m_allNodes = new List<Node>();
+    public List<Node> AllNodes { get { return m_allNodes; } }
+
+    void Awake()
+    {
+        GetNodeList();
+    }
+
+    public void GetNodeList()
+    {
+        Node[] nList = GameObject.FindObjectsOfType<Node>();
+        m_allNodes = new List<Node>(nList);
+    }
+
 }
