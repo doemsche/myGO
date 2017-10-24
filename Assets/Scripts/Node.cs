@@ -30,13 +30,13 @@ public class Node : MonoBehaviour
     // ease in-out for animation
     public iTween.EaseType easeType = iTween.EaseType.easeInExpo;
 
-    // do we activate the animation at Start?
-    public bool autoRun = false;
-
     // delay time before animation
     public float delay = 1f;
 
     bool m_isInitialized = false;
+
+
+    public LayerMask obstacleLayer;
 
     void Awake()
     {
@@ -53,12 +53,6 @@ public class Node : MonoBehaviour
         if (geometry != null)
         {
             geometry.transform.localScale = Vector3.zero;
-
-            // play scale animation at Start
-            if (autoRun)
-            {
-                InitNode();
-            }
 
 			// find the neighboring nodes
 			if (m_board != null)
@@ -106,6 +100,7 @@ public class Node : MonoBehaviour
 
     public void InitNode(){
         if(!m_isInitialized){
+           
             ShowGeometry();
             InitNeighbors();
             m_isInitialized = true;
@@ -121,8 +116,12 @@ public class Node : MonoBehaviour
         yield return new WaitForSeconds(delay);
         foreach(Node n in m_neighborNodes){
             if(!m_linkedNodes.Contains(n)){
-                LinkNode(n);
-                n.InitNode();
+                Obstacle obstacle = FindObstacle(n);
+                if(obstacle == null){
+                    LinkNode(n);
+                    n.InitNode();
+                }
+                
             }
         }
     }
@@ -144,5 +143,16 @@ public class Node : MonoBehaviour
                 targetNode.LinkedNodes.Add(this);
             }
         }
+    }
+
+    Obstacle FindObstacle(Node targetNode){
+        Vector3 checkDirection = targetNode.transform.position - transform.position;
+        RaycastHit raycastHit;
+
+        if (Physics.Raycast(transform.position, checkDirection, out raycastHit, Board.spacing + 0.1f, obstacleLayer)){
+            Debug.Log("NODE FOUND OBSTACLE" + this.name + "to " + targetNode.name);
+            return raycastHit.collider.GetComponent<Obstacle>();
+        }
+        return null;
     }
 }
