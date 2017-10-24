@@ -12,11 +12,17 @@ public class Node : MonoBehaviour
 	List<Node> m_neighborNodes = new List<Node>();
     public List<Node> NeighborNodes { get { return m_neighborNodes; } }
 
+
+    List<Node> m_linkedNodes = new List<Node>();
+    public List<Node> LinkedNodes { get { return m_linkedNodes; } }
+
 	// reference to the Board component
 	Board m_board;
 
     // reference to mesh for display of the node
     public GameObject geometry;
+
+    public GameObject linkPrefab;
 
     // time for scale animation to play
     public float scaleTime = 0.3f;
@@ -29,6 +35,8 @@ public class Node : MonoBehaviour
 
     // delay time before animation
     public float delay = 1f;
+
+    bool m_isInitialized = false;
 
     void Awake()
     {
@@ -49,7 +57,7 @@ public class Node : MonoBehaviour
             // play scale animation at Start
             if (autoRun)
             {
-                ShowGeometry();
+                InitNode();
             }
 
 			// find the neighboring nodes
@@ -94,5 +102,47 @@ public class Node : MonoBehaviour
         }
 		// return our temporary list
 		return nList;
+    }
+
+    public void InitNode(){
+        if(!m_isInitialized){
+            ShowGeometry();
+            InitNeighbors();
+            m_isInitialized = true;
+        }
+       
+    }
+
+    void InitNeighbors(){
+        StartCoroutine(InitNeighborsRoutine());
+    }
+
+    IEnumerator InitNeighborsRoutine(){
+        yield return new WaitForSeconds(delay);
+        foreach(Node n in m_neighborNodes){
+            if(!m_linkedNodes.Contains(n)){
+                LinkNode(n);
+                n.InitNode();
+            }
+        }
+    }
+
+    void LinkNode(Node targetNode){
+        if(linkPrefab != null){
+            GameObject linkInstance = Instantiate(linkPrefab, transform.position, Quaternion.identity);
+            linkInstance.transform.parent = transform;
+
+            Link link = linkInstance.GetComponent<Link>();
+            if(link != null){
+                link.DrawLink(transform.position, targetNode.transform.position);
+            }
+            if(!m_linkedNodes.Contains(targetNode)){
+                m_linkedNodes.Add(targetNode);
+            }
+
+            if(!targetNode.LinkedNodes.Contains(this)){
+                targetNode.LinkedNodes.Add(this);
+            }
+        }
     }
 }
